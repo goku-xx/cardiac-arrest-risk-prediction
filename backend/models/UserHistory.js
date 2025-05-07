@@ -2,15 +2,22 @@
 const mongoose = require("mongoose");
 
 const UserHistorySchema = new mongoose.Schema({
-  age: Number,
-  gender: String,
-  bloodPressure: Number,
-  cholesterol: Number,
-  diabetes: Boolean,
-  saltIntake: String,
-  processedFood: Boolean,
-  prediction: Object,
-  timestamp: { type: Date, default: Date.now },
+  userId: {
+    type: String,
+    required: true,
+  },
+  inputData: {
+    type: Object,
+    required: true,
+  },
+  predictionResult: {
+    type: Object,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("UserHistory", UserHistorySchema);

@@ -1,12 +1,27 @@
 // backend/controllers/historyController.js
 const UserHistory = require("../models/UserHistory");
 
-exports.getUserHistory = async (req, res) => {
+// Save prediction result to user history
+exports.saveHistory = async (req, res) => {
+  const { userId, inputData, predictionResult } = req.body;
+
   try {
-    const history = await UserHistory.find().sort({ timestamp: -1 });
+    const newHistory = new UserHistory({ userId, inputData, predictionResult });
+    await newHistory.save();
+    res.status(201).json({ message: "History saved successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error saving history.", error });
+  }
+};
+
+// Get user history
+exports.getHistory = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const history = await UserHistory.find({ userId }).sort({ date: -1 });
     res.status(200).json(history);
   } catch (error) {
-    console.error("History Retrieval Error:", error);
-    res.status(500).json({ error: "Failed to retrieve history." });
+    res.status(500).json({ message: "Error fetching history.", error });
   }
 };
