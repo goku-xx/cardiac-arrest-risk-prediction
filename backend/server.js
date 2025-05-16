@@ -1,30 +1,17 @@
-// backend/server.js
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const appBase = require('./app');
+const app = require('./app');
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = 'mongodb://localhost:27017/heart_disease_db';
 
-app.use(cors());
-app.use(express.json()); // To parse JSON bodies
-
-// Use base app routes
-app.use(appBase);
-
-app.post('/api/predict', (req, res) => {
-  const { saltIntake, physicalActivity, smoking, alcohol, bloodPressure, cholesterol, diabetes } = req.body;
-  
-  // Here you would process the data (e.g., use ML model to make predictions)
-  // For now, just return a sample response:
-  const prediction = {
-    riskLevel: 'High', // This would come from your model
-    probability: 85, // This would come from your model
-  };
-
-  res.json(prediction); // Send prediction response to frontend
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Connected to MongoDB');
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
 });
