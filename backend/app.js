@@ -23,4 +23,9 @@ app.use("/api/sleep", sleepRoutes);
 app.use("/api/steps", stepRoutes);
 app.use("/api/risk", riskRoutes);
 
+// Add welcome message route
+app.get("/", (req, res) => {
+  res.send("Welcome to cardiac arrest risk prediction API");
+});
+
 module.exports = app;
